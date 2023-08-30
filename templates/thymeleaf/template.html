@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+body {
+	font-family: 'DejaVu Sans';
+	font-size: 8pt;
+	padding: 0;
+	margin: 0;
+	width: 210mm;
+	height: 297mm;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.small {
+	font-size: 0.8em
+}
+
+td { 
+	white-space: pre; /* CSS 2.0 */ 
+	white-space: pre-wrap; /* CSS 2.1 */ 
+	white-space: pre-line; /* CSS 3.0 */ 
+	white-space: -pre-wrap; /* Opera 4-6 */ 
+	white-space: -o-pre-wrap; /* Opera 7 */ 
+	white-space: -moz-pre-wrap; /* Mozilla */ 
+	white-space: -hp-pre-wrap; /* HP Printers */ 
+	word-wrap: break-word; /* IE 5+ */ 
+} 
+
+.voucher {
+	border: 0.25mm solid #000;
+	padding: 3mm;
+	page-break-inside: avoid;
+	/*height: 122mm;*/
+}
+
+.description-wrapper {
+	background-color: #eee;
+	padding: 3mm 3mm 1mm;
+	display:block;
+}
+
+.voucher-title,
+.offer-title {
+	font-weight: bold;
+	text-align: center;
+	margin: 0;
+	padding: 5mm 0;
+}
+
+.voucher-title {
+	font-size: 1.75em;
+}
+
+.offer-title{
+	word-break: break-all;
+	word-wrap: break-word;
+	line-break: anywhere;
+    overflow-wrap: break-word;
+    white-space: pre;           /* CSS 2.0 */
+	white-space: pre-wrap;      /* CSS 2.1 */
+	white-space: pre-line;      /* CSS 3.0 */
+	white-space: -pre-wrap;     /* Opera 4-6 */
+	white-space: -o-pre-wrap;   /* Opera 7 */
+	white-space: -moz-pre-wrap; /* Mozilla */
+	white-space: -hp-pre-wrap;  /* HP Printers */
+	word-wrap: break-word;      /* IE 5+ */
+	background-color: #fff;
+	font-size: 1.5em;
+	max-width: 91mm;
+}
+
+.dl {
+	display:block;
+	width: 100%;
+}
+
+.dt {
+    display:inline-block;
+}
+
+.dd {
+  	display:inline-block;  
+ 	margin-left: 0px;
+  	font-weight: bold;
+}
+
+.details {
+	vertical-align: top;	
+}
+
+.description{
+    padding-right: 4mm;
+    vertical-align: top;
+}
+
+.description h2 {
+    text-align: center;
+}
+
+.description > div {
+    padding: 4mm 0
+}
+
+div.voucher-buyer,
+div.voucher-handling{
+    border-top: 0.25mm solid #fff;
+}
+
+.details div.image,
+.details div.info > div{
+    padding: 4mm;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.details div.info > div {
+	border-top: 0.25mm solid #eee;
+}
+
+.details .dt {
+    min-width: 100px;
+}
+
+.details .dl {
+	padding: 4mm 0;
+	border-top: 0.25mm solid #eee;
+}
+
+.details .image img{
+	width: 50%;
+	display: inline-block;
+}
+
+.voucher-conditions {
+	padding: 4mm 0;
+	border-top: 0.25mm solid #fff;
+}
+
+table.description td.voucher-buyer, table.description td.voucher-validity,
+	table.description td.voucher-handling, table.description td.voucher-conditions
+	{
+	padding: 4mm 0;
+}
+
+table.description td.voucher-validity, table.description td.voucher-buyer
+	{
+	border-bottom: 0.25mm solid #fff;
+}
+
+table.description td.voucher-buyer td.dd {
+	font-weight: bold;
+}
+
+table.description td.voucher-buyer tr.voucher-buyer-company td {
+	padding-top: 3mm;
+}
+
+table.description td.voucher-handling {
+	padding-bottom: 0;
+}
+
+table.description td.voucher-conditions {
+	border-top: 0.25mm solid #fff;
+	padding-bottom: 0;
+}
+
+table.details {
+	background-color: #fff;
+	width: 96mm;
+}
+
+table.details td.images {
+	padding: 6mm 4mm;
+	text-align: right;
+}
+
+table.details td.dt, table.details td.dd {
+	border-top: 0.25mm solid #eee;
+	padding: 3mm 4mm;
+}
+
+table.details td.dd {
+	border-left: 0.25mm solid #eee;
+	font-weight: bold;
+	width: 60mm;
+}
+
+div.barcode {
+	padding-top: 5mm;
+	text-align: center;
+}
+
+div.barcode img {
+	height: 12mm;
+	width: auto;
+ }
+</style>
+</head>
+<body>
+	<div class="voucher">
+		<div class="description-wrapper">
+			<table>
+				<tbody>
+				<tr>
+					<td width="50%" class="description">
+						<h2 th:if="${voucherTitle != null}">
+							<span class="voucher-title" th:text="${voucherTitle}">Voucher Titel</span>
+						</h2>
+						<h2 class="offer-title" th:text="${offerTitle}">
+							Offer Titel
+						</h2>
+						<div th:if="${voucherValidity != null}" class="voucher-time">
+							<span class="voucher-validity" th:text="${voucherValidity}">Voucher Validity</span>
+						</div>
+						<div th:if="${not #strings.isEmpty(lastname)}" class="voucher-buyer">
+							<div class="dl">
+								<span class="dt" th:text="#{VOUCHERPDF_FORPERSON}">Anrede</span>
+								<span class="dd" th:text="${salutation} + ' ' + ${firstname} + ' ' + ${lastname}">Gruß Vorname Nachname</span>
+							</div>
+							<div class="dl voucher-buyer-company" th:if="${not #strings.isEmpty(company)}">
+								<span class="dt" th:text="#{VOUCHERPDF_FORCOMPANY}">Firma</span>
+								<span class="dd" th:text="${company}">Firmenname</span>
+							</div>
+						</div>
+						<div th:if="${voucherHandling != null}" class="voucher-handling">
+							<span th:text="${voucherHandling}">voucher_handling</span>
+						</div>
+					</td>
+					<td width="50%" class="details">
+						<div class="image" th:if="${thumbnailUrl != null or imageUrl != null}"><img th:if="${not #strings.isEmpty(thumbnailUrl)}" th:src="@{${thumbnailUrl}}"><img th:if="${not #strings.isEmpty(imageUrl)}" width="50mm" th:src="@{${imageUrl}}" /></div>
+						<div class="info">
+							<div class="dl">
+								<span class="dt" th:text="#{VOUCHERPDF_VALUE}"></span>
+								<span class="dd" th:text="${currency} + ' ' + ${total}">EUR 5</span>
+							</div>
+							<div class="dl">
+								<span class="dt" th:text="#{VOUCHERPDF_VALIDITY}"></span>
+								<span class="dd" th:if="${#strings.equals(validTo, '-')}" th:text="#{VOUCHERPDF_VALIDITY_UNLIMITED}"></span>
+								<span class="dd" th:unless="${#strings.equals(validTo, '-')}" th:text="${validTo}">Gestern</span>
+							</div>
+							<div class="dl" th:if="${not #strings.isEmpty(onlineCode)}">
+								<span class="dt" th:text="${onlineCodeDesc}">Onlinecode Beschreibung</span>
+								<span class="dd" th:text="${onlineCode}">Onlinecode</span>
+							</div>
+							<div class="dl" th:if="${not #strings.isEmpty(pinCode)}">
+								<span class="dt" th:text="${pinCodeDesc}">Pincode Beschreibung</span>
+								<span class="dd" th:text="${pinCode}">Pincode</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<div th:if="${not #strings.isEmpty(conditions)}" class="voucher-conditions">
+				<div class="bold" th:text="#{VOUCHERPDF_CONDITIONS}"></div>
+				<div class="small" th:text="${conditions}">
+					<br>Bedingungen
+				</div>
+			</div>
+		</div>
+		<div th:if="${not #strings.isEmpty(offlineCode)}" class="barcode">
+			<img th:if="${not #strings.isEmpty(barcodeBase64)}"
+				th:src="@{'data:image/png;base64,' + ${barcodeBase64}}">
+			<div class="code" th:text="${offlineCode}">offlinecode</div>
+		</div>
+	</div>
+</body>
+</html>
